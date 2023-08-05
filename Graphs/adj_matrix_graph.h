@@ -14,6 +14,8 @@ public:
 
     int getEdgeValue(int node1, int node2) override;
     std::vector<int> getNeighbours(int node) override;
+    void addEdge(int start_node, int end_node) override;
+    void delEdge(int start_node, int end_node) override;
     friend std::ostream& operator<<(std::ostream& os, Graph &g);
 private:
     int **adj_matrix = nullptr;

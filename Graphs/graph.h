@@ -19,6 +19,8 @@ public:
     int getNodeValue(int node);
     virtual int getEdgeValue(int node1, int node2);
     virtual std::vector<int> getNeighbours(int node1);
+    virtual void addEdge(int start_node, int end_node);
+    virtual void delEdge(int start_node, int end_node);
 
 protected:
     int vertices;
