@@ -25,27 +25,10 @@ int Graph::getNodeValue(int node)
     return this->node[node];
 }
 
-// int Graph::getEdgeValue(int node1, int node2)
-// {
-//     return 0;
-// }
-
-// std::vector<int> Graph::getNeighbours(int node1)
-// {
-//     return std::vector<int>();
-// }
-
-// void Graph::addEdge(int start_node, int end_node)
-// {
-// }
-
-// void Graph::delEdge(int start_node, int end_node)
-// {
-// }
-
-// void Graph::printGraph(std::ostream &os)
-// {
-// }
+void Graph::setNodeValue(int node, int value)
+{
+    this->node[node] = value;
+}
 
 Graph *createGraph(int vertices, 
                     int edges, 

@@ -3,28 +3,90 @@
 #include "gtest/gtest.h"
 #include "adj_matrix_graph.h"
 
-
-TEST(adj_matrix, Parameters)
+class AdjMatrixTestFixture : public ::testing::Test
 {
-    const int vertices = 4;
-    const int edges = 7; // TODO: compute the edges based on the neigh list
-    std::vector<int> neigh[vertices] = {{1, 2}, {0, 2, 3}, {0, 1, 3}, {1, 2}};
-    AdjMatrixGraph g(vertices, 0, neigh);
+protected:
+    int vertices = 4;
+    int edges = 7; // TODO: compute the edges based on the neigh list
+    AdjMatrixGraph *g;
+    std::vector<int> node_value;
+    // TODO: find way to use vertices instead of hardcoded number
+    std::vector<int> neigh[4] = {{1, 2}, {0, 2, 3}, {0, 1, 3}, {1, 2}};
 
-    EXPECT_EQ(g.getVerticeCount(), vertices);
+    virtual void SetUp()
+    {
+        // neigh = {{1, 2}, {0, 2, 3}, {0, 1, 3}, {1, 2}};
+        g = new AdjMatrixGraph(vertices, 0, neigh);
+        node_value = {2, 1, 3, 0};
+        for (int i = 0; i < vertices; i++)
+        {
+            g->setNodeValue(i, node_value[i]);
+        }
+    }
 
-    EXPECT_EQ(g.getEdgeCount(), edges);
-    // Add an edge between existing nodes
-    g.addEdge(0, 1);
-    EXPECT_EQ(g.getEdgeCount(), edges);
-    // Add an edge between non-existing nodes
-    g.addEdge(0, 3);
-    EXPECT_EQ(g.getEdgeCount(), edges + 1);
+    virtual void TearDown()
+    {
+        delete g;
+    }
+};
 
-    // Delete an edge between existing nodes
-    g.delEdge(0, 3);
-    EXPECT_EQ(g.getEdgeCount(), edges) << "Delete an edge between existing nodes";
-    // Delete an edge between non-existing node
-    g.delEdge(0, 3);
-    EXPECT_EQ(g.getEdgeCount(), edges);
+TEST_F(AdjMatrixTestFixture, VerticeCount)
+{
+    EXPECT_EQ(g->getVerticeCount(), vertices) << "Vertice count mismatch!";
+}
+
+TEST_F(AdjMatrixTestFixture, EdgeCount)
+{
+    EXPECT_EQ(g->getEdgeCount(), edges) << "Edge count mismatch!";
+}
+
+TEST_F(AdjMatrixTestFixture, AddEdgeBetweenExistingNode)
+{
+    g->addEdge(0, 1);
+    EXPECT_EQ(g->getEdgeCount(), edges) << "Failed since node added between existing nodes";
+}
+
+TEST_F(AdjMatrixTestFixture, AddEdgeBetweenNonExistingNode)
+{
+    g->addEdge(0, 3);
+    EXPECT_EQ(g->getEdgeCount(), edges + 1) << "Failed to Add an edge between non-existing nodes";
+}
+
+TEST_F(AdjMatrixTestFixture, DelEdgeBetweenExistingNode)
+{
+    g->delEdge(0, 3);
+    EXPECT_EQ(g->getEdgeCount(), edges) << "Failed to Delete an edge between existing nodes";
+}
+
+TEST_F(AdjMatrixTestFixture, DelEdgeBetweenNonExistingNode)
+{
+    g->delEdge(0, 3);
+    EXPECT_EQ(g->getEdgeCount(), edges) << "Failed since edge deleted between existing nodes";
+}
+
+TEST_F(AdjMatrixTestFixture, TestNodeValue)
+{
+    for (int i = 0; i < vertices; i++)
+    {
+        EXPECT_EQ(g->getNodeValue(i), node_value[i]);
+    }
+}
+
+TEST_F(AdjMatrixTestFixture, TestEdgeValue)
+{
+    for (int i = 0; i < vertices; i++)
+    {
+        for (auto it : neigh[i])
+        {
+            EXPECT_GE(g->getEdgeValue(i, it), true) << "Neighbour but edge value is less than 1!";
+        }
+    }
+}
+
+TEST_F(AdjMatrixTestFixture, TestNeigbours)
+{
+    for (int i = 0; i < vertices; i++)
+    {
+        EXPECT_EQ(g->getNeighbours(i), neigh[i]);
+    }
 }

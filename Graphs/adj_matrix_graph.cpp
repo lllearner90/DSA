@@ -6,10 +6,11 @@ AdjMatrixGraph::AdjMatrixGraph(int vertices, int edges, std::vector<int> neigh[]
     this->vertices = vertices;
     this->edges = edges;
     this->graph_type = Graph::GraphType::ADJ_MATRIX;
-
     this->adj_matrix = new int *[vertices];
     for (int i = 0; i < vertices; i++)
     {
+        // create and initialize node value list
+        this->node.push_back(-1);
         this->adj_matrix[i] = new int[vertices];
     }
 

@@ -18,6 +18,7 @@ public:
     int getVerticeCount(void);
     int getEdgeCount(void);
     int getNodeValue(int node);
+    void setNodeValue(int node, int value);
     virtual int getEdgeValue(int node1, int node2) = 0;
     virtual std::vector<int> getNeighbours(int node1) = 0;
     virtual void addEdge(int start_node, int end_node) = 0;
